@@ -2,13 +2,16 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="movies-info-service" />
         <module name="discovery-movie-service" />
+        <module name="movies-reviews-service" />
         <module name="spring-webFlux" />
+        <module name="movies-service" />
         <module name="movies-config-service" />
       </profile>
     </annotationProcessing>
@@ -18,6 +21,8 @@
       <module name="discovery-movie-service" options="-parameters" />
       <module name="movies-config-service" options="-parameters" />
       <module name="movies-info-service" options="-parameters" />
+      <module name="movies-reviews-service" options="-parameters" />
+      <module name="movies-service" options="-parameters" />
     </option>
   </component>
 </project>
