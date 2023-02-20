@@ -7,6 +7,7 @@
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/discovery-movie-service/pom.xml" />
         <option value="$PROJECT_DIR$/movies-config-service/pom.xml" />
+        <option value="$PROJECT_DIR$/movies-info-service/pom.xml" />
       </list>
     </option>
   </component>
