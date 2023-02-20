@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DataMongoTest
-@ActiveProfiles("test")
+//@ActiveProfiles("test")
 class MovieInfoRepositoryIntegrationTest {
 
     @Autowired
