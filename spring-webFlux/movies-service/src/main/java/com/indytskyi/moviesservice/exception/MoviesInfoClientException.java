@@ -1,11 +1,11 @@
 package com.indytskyi.moviesservice.exception;
 
-
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter
-public class MoviesInfoClientException extends RuntimeException{
+@Getter
+@Setter
+public class MoviesInfoClientException extends RuntimeException {
     private String message;
     private Integer statusCode;
 

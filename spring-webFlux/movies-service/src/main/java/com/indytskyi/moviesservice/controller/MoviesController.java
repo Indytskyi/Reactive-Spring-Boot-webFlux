@@ -1,6 +1,5 @@
 package com.indytskyi.moviesservice.controller;
 
-
 import com.indytskyi.moviesservice.domain.Movie;
 import com.indytskyi.moviesservice.domain.MovieInfo;
 import com.indytskyi.moviesservice.service.impl.MovieServiceImpl;
@@ -22,7 +21,7 @@ public class MoviesController {
 
     @GetMapping("/{id}")
     public Mono<Movie> retrieveMovieById(@PathVariable("id") String movieId) {
-         return movieServiceImpl.retrieveMovieById(movieId);
+        return movieServiceImpl.retrieveMovieById(movieId);
     }
 
     @GetMapping(value = "/stream", produces = MediaType.APPLICATION_NDJSON_VALUE)

@@ -1,9 +1,12 @@
 package com.indytskyi.moviesreviewsservice.handler.impl;
 
+import com.indytskyi.moviesreviewsservice.exception.ReviewDataException;
 import com.indytskyi.moviesreviewsservice.handler.ReviewHandler;
 import com.indytskyi.moviesreviewsservice.model.Review;
-import com.indytskyi.moviesreviewsservice.exception.ReviewDataException;
 import com.indytskyi.moviesreviewsservice.repository.ReviewReactiveRepository;
+import java.util.stream.Collectors;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,10 +18,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
-import java.util.stream.Collectors;
-
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -27,7 +26,6 @@ public class ReviewHandlerImpl implements ReviewHandler {
     private final ReviewReactiveRepository reviewReactiveRepository;
     private final Validator validator;
     private final Sinks.Many<Review> reviewSink = Sinks.many().replay().all();
-
 
     @Override
     public Mono<ServerResponse> addReview(ServerRequest request) {
@@ -57,7 +55,8 @@ public class ReviewHandlerImpl implements ReviewHandler {
         var movieInfoId = serverRequest.queryParam("movieInfoId");
 
         if (movieInfoId.isPresent()) {
-            var reviewsFlux = reviewReactiveRepository.findAllByMovieInfoId(Long.valueOf(movieInfoId.get()));
+            var reviewsFlux = reviewReactiveRepository
+                    .findAllByMovieInfoId(Long.valueOf(movieInfoId.get()));
             return buildReviewsResponse(reviewsFlux);
         } else {
             var reviewsFlux = reviewReactiveRepository.findAll();
@@ -74,7 +73,9 @@ public class ReviewHandlerImpl implements ReviewHandler {
         var reviewId = request.pathVariable("id");
 
         var existingReview = reviewReactiveRepository.findById(reviewId)
-                .switchIfEmpty(Mono.error(new ReviewDataException("Review not found for yhe given Review id " + reviewId)));
+                .switchIfEmpty(Mono.error(
+                        new ReviewDataException("Review not found for yhe given Review id "
+                                + reviewId)));
 
         return existingReview
                 .flatMap(review -> request.bodyToMono(Review.class)

@@ -17,7 +17,6 @@ public class MovieServiceImpl implements MovieService {
     private final MoviesInfoRestClient moviesInfoRestClient;
     private final ReviewsRestClient reviewsRestClient;
 
-
     @Override
     public Mono<Movie> retrieveMovieById(String movieId) {
         return moviesInfoRestClient

@@ -1,9 +1,6 @@
 package com.indytskyi.moviesservice.client;
 
-import com.indytskyi.moviesservice.domain.MovieInfo;
 import com.indytskyi.moviesservice.domain.Review;
-import com.indytskyi.moviesservice.exception.MoviesInfoClientException;
-import com.indytskyi.moviesservice.exception.MoviesInfoServerException;
 import com.indytskyi.moviesservice.exception.ReviewsClientException;
 import com.indytskyi.moviesservice.exception.ReviewsServerException;
 import com.indytskyi.moviesservice.util.RetryUtil;
@@ -34,28 +31,32 @@ public class ReviewsRestClient {
                 .queryParam("movieInfoId", movieId)
                 .buildAndExpand().toUriString();
 
-         return webClient
+        return webClient
                 .get()
                 .uri(url)
                 .retrieve()
-                 .onStatus(HttpStatus::is4xxClientError, this::errorHandler4xxRetrieveMovieInfo)
-                 .onStatus(HttpStatus::is5xxServerError, this::errorHandler5xxRetrieveMovieInfo)
+                .onStatus(HttpStatus::is4xxClientError, this::errorHandler4xxRetrieveMovieInfo)
+                .onStatus(HttpStatus::is5xxServerError, this::errorHandler5xxRetrieveMovieInfo)
                 .bodyToFlux(Review.class)
-                 .retryWhen(RetryUtil.retrySpec());
+                .retryWhen(RetryUtil.retrySpec());
     }
 
-    private Mono<? extends Throwable> errorHandler4xxRetrieveMovieInfo(ClientResponse clientResponse) {
+    private Mono<? extends Throwable> errorHandler4xxRetrieveMovieInfo(
+            ClientResponse clientResponse) {
+
         log.info("Status code is : {}", clientResponse.statusCode().value());
 
-        if (clientResponse.statusCode().equals(HttpStatus.NOT_FOUND))
+        if (clientResponse.statusCode().equals(HttpStatus.NOT_FOUND)) {
             return Mono.empty();
-
+        }
 
         return clientResponse.bodyToMono(String.class)
-                .flatMap(responseMessage -> Mono.error(new ReviewsClientException(responseMessage)));
+                .flatMap(responseMessage -> Mono.error(
+                        new ReviewsClientException(responseMessage)));
     }
 
-    private Mono<? extends Throwable> errorHandler5xxRetrieveMovieInfo(ClientResponse clientResponse) {
+    private Mono<? extends Throwable> errorHandler5xxRetrieveMovieInfo(
+            ClientResponse clientResponse) {
         log.info("Status code is : {}", clientResponse.statusCode().value());
 
         return clientResponse.bodyToMono(String.class)
