@@ -10,7 +10,6 @@
         <module name="movies-info-service" />
         <module name="discovery-movie-service" />
         <module name="movies-reviews-service" />
-        <module name="spring-webFlux" />
         <module name="movies-service" />
         <module name="movies-config-service" />
       </profile>
