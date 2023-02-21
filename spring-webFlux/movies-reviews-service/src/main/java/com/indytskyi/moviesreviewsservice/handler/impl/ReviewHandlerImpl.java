@@ -1,6 +1,7 @@
 package com.indytskyi.moviesreviewsservice.handler.impl;
 
 import com.indytskyi.moviesreviewsservice.exception.ReviewDataException;
+import com.indytskyi.moviesreviewsservice.exception.ReviewNotFoundException;
 import com.indytskyi.moviesreviewsservice.handler.ReviewHandler;
 import com.indytskyi.moviesreviewsservice.model.Review;
 import com.indytskyi.moviesreviewsservice.repository.ReviewReactiveRepository;
@@ -74,7 +75,7 @@ public class ReviewHandlerImpl implements ReviewHandler {
 
         var existingReview = reviewReactiveRepository.findById(reviewId)
                 .switchIfEmpty(Mono.error(
-                        new ReviewDataException("Review not found for yhe given Review id "
+                        new ReviewNotFoundException("Review not found for the given Review id "
                                 + reviewId)));
 
         return existingReview

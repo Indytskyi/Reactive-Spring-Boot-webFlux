@@ -98,10 +98,6 @@ class MoviesInfoControllerIntegrationTest {
                 .isOk()
                 .expectBody() //MovieInfo.class
                 .jsonPath("$.name").isEqualTo("Dark Knight Rises");
-//                .consumeWith(movieInfoEntityExchangeResult -> {
-//                    var responseBody = movieInfoEntityExchangeResult.getResponseBody();
-//                    assertNotNull(responseBody);
-//                });
 
         //then
     }
