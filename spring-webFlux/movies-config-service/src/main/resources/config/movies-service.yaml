@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: movies-service
   config:
     activate:
       on-profile: -local

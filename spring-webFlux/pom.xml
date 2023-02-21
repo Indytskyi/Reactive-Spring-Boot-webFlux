@@ -15,6 +15,7 @@
         <module>movies-info-service</module>
         <module>movies-config-service</module>
         <module>discovery-movie-service</module>
+        <module>movies-api-gateway</module>
     </modules>
 
     <groupId>com.indytskyi</groupId>

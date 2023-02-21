@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: movies-info-service
   data:
     mongodb:
       username: root

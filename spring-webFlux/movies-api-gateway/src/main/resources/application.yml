@@ -1,0 +1,29 @@
+server:
+  port: 8089
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: reviews
+          uri: lb://reviews-service
+          predicates:
+            - Path=/v1/reviews/**
+        - id: movies-info
+          uri: lb://movies-info-service
+          predicates:
+            - Path=/v1/movie-info/**
+        - id: movies
+          uri: lb://movies-service
+          predicates:
+            - Path=/v1/movies/**
+
