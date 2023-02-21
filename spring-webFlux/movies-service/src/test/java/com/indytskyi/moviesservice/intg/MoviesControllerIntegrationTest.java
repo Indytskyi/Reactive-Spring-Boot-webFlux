@@ -3,16 +3,22 @@ package com.indytskyi.moviesservice.intg;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.indytskyi.moviesservice.domain.Movie;
+import com.indytskyi.moviesservice.domain.MovieInfo;
+import java.time.LocalDate;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.util.Objects;
+import reactor.core.publisher.Flux;
+import reactor.test.StepVerifier;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -171,5 +177,31 @@ public class MoviesControllerIntegrationTest {
         //then
         WireMock.verify(6, getRequestedFor(urlPathMatching("/v1/reviews*")));
     }
+
+    @Test
+    void retrieveMovieStream() {
+        //given
+        var id = "retrieveMovieById";
+
+        //when
+        stubFor(get(urlEqualTo("/v1/movie-info/stream"))
+                .willReturn(aResponse()
+                        .withHeader("Content-Type", MediaType.APPLICATION_NDJSON_VALUE)
+                        .withBodyFile("movieinfo.json")));
+        Flux<MovieInfo> responseBody = webTestClient
+                .get()
+                .uri("/v1/movies/stream", id)
+                .exchange()
+                .expectStatus().isOk()
+                .returnResult(MovieInfo.class)
+                .getResponseBody();
+        StepVerifier.create(responseBody)
+                .assertNext(movieInfo -> {
+                    assert Objects.equals(movieInfo.getMovieInfoId(), "1");
+                })
+                .thenCancel()
+                .verify();
+    }
+
 
 }

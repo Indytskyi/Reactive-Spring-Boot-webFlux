@@ -23,7 +23,6 @@ public class MoviesInfoRestClient {
     private String moviesInfoUrl;
     private final WebClient webClient;
 
-
     public Mono<MovieInfo> retrieveMovieInfo(String movieId) {
         return webClient
                 .get()
@@ -48,23 +47,31 @@ public class MoviesInfoRestClient {
                 .retrieve()
                 .onStatus(
                         HttpStatus::is4xxClientError,
-                        clientResponse -> {
-                            log.info("Status code is : {}", clientResponse.statusCode().value());
-
-                            return clientResponse.bodyToMono(String.class)
-                                    .flatMap(responseMessage ->
-                                            Mono.error(new MoviesInfoClientException(
-                                                    responseMessage,clientResponse.statusCode().value())
-                                            )
-                                    );
-                        }
+                        this::errorHandler4xxRetrieveMovieInfoStream
                 )
                 .onStatus(HttpStatus::is5xxServerError, this::errorHandler5xxRetrieveMovieInfo)
                 .bodyToFlux(MovieInfo.class)
                 .retryWhen(RetryUtil.retrySpec());
     }
 
-    private Mono<? extends Throwable> errorHandler4xxRetrieveMovieInfo(ClientResponse clientResponse, String movieId) {
+    private Mono<? extends Throwable> errorHandler4xxRetrieveMovieInfoStream(
+            ClientResponse clientResponse) {
+
+        log.info("Status code is : {}", clientResponse.statusCode().value());
+
+        return clientResponse.bodyToMono(String.class)
+                .flatMap(responseMessage ->
+                        Mono.error(
+                                new MoviesInfoClientException(
+                                        responseMessage, clientResponse.statusCode().value())
+                        )
+                );
+    }
+
+    private Mono<? extends Throwable> errorHandler4xxRetrieveMovieInfo(
+            ClientResponse clientResponse,
+            String movieId) {
+
         log.info("Status code is : {}", clientResponse.statusCode().value());
 
         if (clientResponse.statusCode().equals(HttpStatus.NOT_FOUND)) {
@@ -77,13 +84,14 @@ public class MoviesInfoRestClient {
         return clientResponse.bodyToMono(String.class)
                 .flatMap(responseMessage ->
                         Mono.error(new MoviesInfoClientException(
-                                responseMessage,clientResponse.statusCode().value())
+                                responseMessage, clientResponse.statusCode().value())
                         )
                 );
     }
 
+    private Mono<? extends Throwable> errorHandler5xxRetrieveMovieInfo(
+            ClientResponse clientResponse) {
 
-    private Mono<? extends Throwable> errorHandler5xxRetrieveMovieInfo(ClientResponse clientResponse) {
         log.info("Status code is : {}", clientResponse.statusCode().value());
 
         return clientResponse.bodyToMono(String.class)

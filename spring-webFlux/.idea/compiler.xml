@@ -7,10 +7,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="movies-api-gateway" />
         <module name="movies-info-service" />
         <module name="discovery-movie-service" />
         <module name="movies-reviews-service" />
-        <module name="spring-webFlux" />
         <module name="movies-service" />
         <module name="movies-config-service" />
       </profile>
@@ -19,6 +19,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="discovery-movie-service" options="-parameters" />
+      <module name="movies-api-gateway" options="-parameters" />
       <module name="movies-config-service" options="-parameters" />
       <module name="movies-info-service" options="-parameters" />
       <module name="movies-reviews-service" options="-parameters" />

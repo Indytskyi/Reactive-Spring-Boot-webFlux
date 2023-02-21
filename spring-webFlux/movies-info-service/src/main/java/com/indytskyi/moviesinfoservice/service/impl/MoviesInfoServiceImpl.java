@@ -1,6 +1,5 @@
 package com.indytskyi.moviesinfoservice.service.impl;
 
-
 import com.indytskyi.moviesinfoservice.model.MovieInfo;
 import com.indytskyi.moviesinfoservice.repository.MovieInfoRepository;
 import com.indytskyi.moviesinfoservice.service.MoviesInfoService;
@@ -32,16 +31,18 @@ public class MoviesInfoServiceImpl implements MoviesInfoService {
 
     @Override
     public Mono<MovieInfo> updateMovieInfo(MovieInfo updatedMovieInfo, String id) {
-       return movieInfoRepository
-               .findById(id)
-               .flatMap(oldMovieInfo -> {
+        return movieInfoRepository
+                .findById(id)
+                .flatMap(oldMovieInfo -> {
                     updateOldDataOfMoviesInfoToUpdated(oldMovieInfo, updatedMovieInfo);
-                   return movieInfoRepository.save(oldMovieInfo);
-               });
+                    return movieInfoRepository.save(oldMovieInfo);
+                });
 
     }
 
-    private void updateOldDataOfMoviesInfoToUpdated(MovieInfo oldMovieInfo, MovieInfo upDatedMovieInfo) {
+    private void updateOldDataOfMoviesInfoToUpdated(
+            MovieInfo oldMovieInfo, MovieInfo upDatedMovieInfo) {
+
         oldMovieInfo.setCast(upDatedMovieInfo.getCast());
         oldMovieInfo.setName(upDatedMovieInfo.getName());
         oldMovieInfo.setYear(upDatedMovieInfo.getYear());
