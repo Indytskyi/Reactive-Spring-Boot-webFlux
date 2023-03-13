@@ -68,6 +68,9 @@ Relax and test :sunglasses:
 ```
 curl -i http://localhost:8080/v1/reviews/stream
 ```
+```
+curl -i http://localhost:8080/v1/movie-info/stream
+```
 
 ---
 ### THANKS :heart:
